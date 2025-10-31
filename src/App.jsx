@@ -1,3 +1,5 @@
+// App.jsx
+
 import { useState } from "react";
 import "./App.css";
 import SearchForm from "./components/SearchForm";
@@ -9,12 +11,43 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    console.log("Search function started!");
+
+    setIsLoading(true);
+    setError(null);
+    setWeatherData(null);
+
+    const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+    try {
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error("City not found");
+      }
+
+      const data = await response.json();
+      setWeatherData(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="app-container">
       <h1>Weather Dashboard</h1>
 
-      <SearchForm />
-      <WeatherDisplay />
+      <SearchForm city={city} setCity={setCity} onSearch={handleSearch} />
+      <WeatherDisplay
+        weatherData={weatherData}
+        isLoading={isLoading}
+        error={error}
+      />
     </div>
   );
 }

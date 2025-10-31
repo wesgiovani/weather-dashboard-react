@@ -1,53 +1,27 @@
-// App.jsx
-
-import { useState } from "react";
+// src/App.jsx
+import { Routes, Route, Link } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import ForecastDetail from "./components/ForecastDetail";
 import "./App.css";
-import SearchForm from "./components/SearchForm";
-import WeatherDisplay from "./components/WeatherDisplay";
 
 function App() {
-  const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    console.log("Search function started!");
-
-    setIsLoading(true);
-    setError(null);
-    setWeatherData(null);
-
-    const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    try {
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error("City not found");
-      }
-
-      const data = await response.json();
-      setWeatherData(data);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className="app-container">
+      {/* 1. Navigation Bar */}
+      <nav>
+        <Link to="/">Home</Link>
+      </nav>
+
       <h1>Weather Dashboard</h1>
 
-      <SearchForm city={city} setCity={setCity} onSearch={handleSearch} />
-      <WeatherDisplay
-        weatherData={weatherData}
-        isLoading={isLoading}
-        error={error}
-      />
+      {/* 2. Define Your "Pages" */}
+      <Routes>
+        {/* Route 1: The Home Page */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* Route 2: The Details Page */}
+        <Route path="/forecast/:city" element={<ForecastDetail />} />
+      </Routes>
     </div>
   );
 }

@@ -1,3 +1,6 @@
+// WeatherDisplay.jsx
+import { Link } from "react-router-dom";
+
 function WeatherDisplay({ weatherData, isLoading, error }) {
   if (isLoading) {
     return <h2>Loading...</h2>;
@@ -13,6 +16,7 @@ function WeatherDisplay({ weatherData, isLoading, error }) {
 
   return (
     <div className="weather-display">
+      <Link to={`/forecast/${weatherData.name}`}>View 5-Day Forecast</Link>
       <h2>{weatherData.name}</h2>
       <p>Temperature: {weatherData.main.temp}°C</p>
       <p>Conditions: {weatherData.weather[0].description}</p>

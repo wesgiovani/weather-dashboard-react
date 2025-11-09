@@ -1,6 +1,9 @@
 // SearchForm.jsx
+import useSearchStore from "../stores/searchStore";
 
-function SearchForm({ city, setCity, onSearch }) {
+function SearchForm({ onSearch }) {
+  const { city, setCity } = useSearchStore();
+
   return (
     <form onSubmit={onSearch}>
       <input
